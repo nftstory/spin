@@ -18,6 +18,7 @@ interface ISpinTheWheelGame {
     error NoBetOnWinningToken();
     error NotInRefundState();
     error ApprovalFailed();
+    error MaxSwapRetriesReached();
 
     enum GamePhase {
         BETTING_ALLOWED, // Automatic transition after 24 hours, for example

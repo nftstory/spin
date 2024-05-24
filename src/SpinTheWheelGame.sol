@@ -199,6 +199,8 @@ contract SpinTheWheelGame is ISpinTheWheelGame, ReentrancyGuard {
      */
     function trySwapTokens() external returns (bool) {
         if (getGamePhase() != GamePhase.SUPRA_REPLIED_TRY_SWAP) revert NotReadyForSupraCallback();
+        if (swapRetries == maxSwapRetries) revert MaxSwapRetriesReached();
+        swapRetries++;
         address[] memory tokens = new address[](tokenCount);
         uint256[] memory amounts = new uint256[](tokenCount);
         for (uint256 i = 0; i < tokenCount; i++) {
@@ -220,13 +222,11 @@ contract SpinTheWheelGame is ISpinTheWheelGame, ReentrancyGuard {
         }
 
         if (!_swapLoserTokensForWETH(loserTokens)) {
-            swapRetries++;
             return false;
         }
 
         // Implicitly sets postSwapAmountWinningToken
         if (!_swapWETHForWinnerToken(winningToken)) {
-            swapRetries++;
             return false;
         }
 
