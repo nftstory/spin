@@ -224,6 +224,7 @@ contract SpinTheWheelGame is ISpinTheWheelGame, ReentrancyGuard {
             return false;
         }
 
+        // Implicitly sets postSwapAmountWinningToken
         if (!_swapWETHForWinnerToken(winningToken)) {
             swapRetries++;
             return false;
